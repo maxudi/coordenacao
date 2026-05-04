@@ -44,7 +44,7 @@ export default function OcorrenciasPage() {
   const fetchOcorrencias = async () => {
     setIsLoading(true)
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('ocorrencias')
       .select(`
         id,
@@ -99,7 +99,7 @@ export default function OcorrenciasPage() {
 
     setIsDeleting(true)
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('ocorrencias')
       .delete()
       .eq('id', deleteTarget.id)
@@ -121,7 +121,7 @@ export default function OcorrenciasPage() {
 
     setIsResolving(true)
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('ocorrencias')
       .update({ status: 'resolvida' })
       .eq('id', selectedOcorrencia.id)
@@ -313,8 +313,11 @@ export default function OcorrenciasPage() {
       <Modal
         open={!!selectedOcorrencia}
         onClose={() => setSelectedOcorrencia(null)}
-        title="Detalhes da ocorrência"
       >
+        <Modal.Header>
+          <Modal.Title>Detalhes da ocorrência</Modal.Title>
+          <Modal.Close onClose={() => setSelectedOcorrencia(null)} />
+        </Modal.Header>
         {selectedOcorrencia && (
           <div className="space-y-6">
             <div>

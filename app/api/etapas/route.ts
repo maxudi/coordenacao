@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase'
  */
 export async function GET() {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('etapas')
       .select('*')
       .order('ordem')
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ erro: 'Peso deve ser entre 1 e 100' }, { status: 400 })
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('etapas')
       .insert({ nome: nome.trim(), ordem: ordem ?? 1, peso })
       .select()

@@ -73,7 +73,7 @@ export default function ImportarFrequenciasPage() {
     const resultado: FrequenciaComErro = {
       aluno_nome: row[colunas.aluno_nome]?.toString().trim() || '',
       data: validarData(row[colunas.data]) || new Date().toISOString().split('T')[0],
-      presente: validarBooleano(row[colunas.presente]),
+      presente: normalizarBooleano(row[colunas.presente]),
     }
 
     const erros: string[] = []
@@ -240,9 +240,9 @@ export default function ImportarFrequenciasPage() {
       header: 'STATUS',
       accessor: (row) => (
         row.erro ? (
-          <Badge variant="danger" size="sm">{row.erro}</Badge>
+          <Badge variant="danger">{row.erro}</Badge>
         ) : (
-          <Badge variant="success" size="sm">✓ Válido</Badge>
+          <Badge variant="success">✓ Válido</Badge>
         )
       ),
     },
@@ -269,11 +269,11 @@ export default function ImportarFrequenciasPage() {
       <Card>
         <Card.Body>
           <Upload
-            maxSize={5}
+            maxSizeMB={5}
             accept=".xlsx,.xls"
-            onSelect={handleFileSelect}
-            title="📊 Arrastar arquivo aqui ou clicar"
-            description="Formatos: .xlsx, .xls (Máx. 5MB)"
+            onFilesChange={(files) => files[0] && handleFileSelect(files[0])}
+            label="📊 Arrastar arquivo aqui ou clicar"
+            hint="Formatos: .xlsx, .xls (Máx. 5MB)"
           />
 
           <div className="mt-6 flex gap-3">
@@ -332,8 +332,11 @@ export default function ImportarFrequenciasPage() {
       <Modal
         open={showInstructions}
         onClose={() => setShowInstructions(false)}
-        title="Instruções de importação"
       >
+        <Modal.Header>
+          <Modal.Title>Instruções de importação</Modal.Title>
+          <Modal.Close onClose={() => setShowInstructions(false)} />
+        </Modal.Header>
         <div className="space-y-4">
           <div>
             <h3 className="font-semibold text-ink mb-2">Colunas obrigatórias:</h3>

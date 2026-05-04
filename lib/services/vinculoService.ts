@@ -17,7 +17,7 @@ export const vinculoService = {
    * Buscar todos os vínculos com dados expandidos
    */
   async getAll(filtros?: { professorId?: string; turmaId?: string; disciplinaId?: string }) {
-    let query = supabase.from('professor_turma_disciplina').select(`
+    let query = (supabase as any).from('professor_turma_disciplina').select(`
       id,
       professor_id,
       turma_id,
@@ -50,7 +50,7 @@ export const vinculoService = {
    * Buscar vínculo por ID
    */
   async getById(id: string) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('professor_turma_disciplina')
       .select(`
         id,
@@ -111,9 +111,9 @@ export const vinculoService = {
 
     // Verificar se entidades existem
     const [prof, turma, disc] = await Promise.all([
-      supabase.from('professores').select('id').eq('id', professorId).maybeSingle(),
-      supabase.from('turmas').select('id').eq('id', turmaId).maybeSingle(),
-      supabase.from('disciplinas').select('id').eq('id', disciplinaId).maybeSingle(),
+      (supabase as any).from('professores').select('id').eq('id', professorId).maybeSingle(),
+      (supabase as any).from('turmas').select('id').eq('id', turmaId).maybeSingle(),
+      (supabase as any).from('disciplinas').select('id').eq('id', disciplinaId).maybeSingle(),
     ])
 
     if (!prof.data) throw new Error('Professor não encontrado')
@@ -121,7 +121,7 @@ export const vinculoService = {
     if (!disc.data) throw new Error('Disciplina não encontrada')
 
     // Verificar duplicação
-    const existente = await supabase
+    const existente = await (supabase as any)
       .from('professor_turma_disciplina')
       .select('id')
       .eq('professor_id', professorId)
@@ -133,7 +133,7 @@ export const vinculoService = {
       throw new Error('Este vínculo já existe')
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('professor_turma_disciplina')
       .insert({
         professor_id: professorId,
@@ -151,7 +151,7 @@ export const vinculoService = {
    * Deletar vínculo
    */
   async delete(id: string) {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('professor_turma_disciplina')
       .delete()
       .eq('id', id)
@@ -164,7 +164,7 @@ export const vinculoService = {
    * (útil para cleanup ao remover professor)
    */
   async deleteByProfessor(professorId: string) {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('professor_turma_disciplina')
       .delete()
       .eq('professor_id', professorId)
@@ -177,7 +177,7 @@ export const vinculoService = {
    * (útil para cleanup ao remover turma)
    */
   async deleteByTurma(turmaId: string) {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('professor_turma_disciplina')
       .delete()
       .eq('turma_id', turmaId)
@@ -190,7 +190,7 @@ export const vinculoService = {
    * Compatibilidade: retorna primeiro professor como "responsável"
    */
   async getProfessoresTurma(turmaId: string) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('professor_turma_disciplina')
       .select('professores(id, nome, email)')
       .eq('turma_id', turmaId)
@@ -206,7 +206,7 @@ export const vinculoService = {
    * (compatibilidade com antigo modelo turma.professor_id)
    */
   async getProfessorResponsavelTurma(turmaId: string) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('professor_turma_disciplina')
       .select('professores(id, nome, email)')
       .eq('turma_id', turmaId)

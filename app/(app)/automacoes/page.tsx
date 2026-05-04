@@ -197,7 +197,7 @@ export default function AutomacoesPage() {
       </div>
 
       {/* Alert de erro */}
-      {erro && <Alert variant="error" title="Erro" description={erro} />}
+      {erro && <Alert variant="danger" title="Erro" description={erro} />}
 
       {/* Resultado da execução */}
       {resultado && (

@@ -1,4 +1,4 @@
-# ─── Stage 1: deps ───────────────────────────────────────────────────────────
+# ─── Stage 1: deps (produção apenas) ─────────────────────────────────────────
 FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -6,11 +6,14 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
-# ─── Stage 2: builder ────────────────────────────────────────────────────────
+# ─── Stage 2: builder (todas as deps para compilar) ──────────────────────────
 FROM node:20-alpine AS builder
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY --from=deps /app/node_modules ./node_modules
+COPY package.json package-lock.json ./
+RUN npm ci
+
 COPY . .
 
 # Variáveis disponíveis em build-time (são públicas; substituídas em runtime via next.config)

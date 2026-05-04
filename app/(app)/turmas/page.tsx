@@ -61,7 +61,7 @@ export default function TurmasPage() {
   const fetchTurmas = async () => {
     setIsLoading(true)
 
-    const { data: turmasData, error: turmasError } = await supabase
+    const { data: turmasData, error: turmasError } = await (supabase as any)
       .from('turmas')
       .select('id, nome, serie, turno, professor_id, professores(nome)')
 
@@ -73,12 +73,12 @@ export default function TurmasPage() {
     }
 
     // Buscar alunos
-    const { data: alunos } = await supabase
+    const { data: alunos } = await (supabase as any)
       .from('alunos')
       .select('id, turma_id, status')
 
     // Buscar frequência resumo
-    const { data: freq } = await supabase
+    const { data: freq } = await (supabase as any)
       .from('frequencia_resumo')
       .select('aluno_id, percentual')
 
@@ -154,7 +154,7 @@ export default function TurmasPage() {
 
     setIsDeleting(true)
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('turmas')
       .delete()
       .eq('id', deleteTarget.id)

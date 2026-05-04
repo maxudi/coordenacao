@@ -272,23 +272,25 @@ export default function AdministracaoPage() {
           value={filtroPerfil}
           onChange={(e) => setFiltroPerfil(e.target.value)}
           className="sm:w-44"
-        >
-          <option value="">Todos os perfis</option>
-          <option value="admin">Administrador</option>
-          <option value="coordenador">Coordenador</option>
-          <option value="professor">Professor</option>
-          <option value="secretaria">Secretaria</option>
-        </Select>
+          options={[
+            { value: '', label: 'Todos os perfis' },
+            { value: 'admin', label: 'Administrador' },
+            { value: 'coordenador', label: 'Coordenador' },
+            { value: 'professor', label: 'Professor' },
+            { value: 'secretaria', label: 'Secretaria' },
+          ]}
+        />
         <Select
           value={filtroStatus}
           onChange={(e) => setFiltroStatus(e.target.value)}
           className="sm:w-40"
-        >
-          <option value="">Todos os status</option>
-          <option value="ativo">Ativo</option>
-          <option value="inativo">Inativo</option>
-          <option value="pendente">Pendente</option>
-        </Select>
+          options={[
+            { value: '', label: 'Todos os status' },
+            { value: 'ativo', label: 'Ativo' },
+            { value: 'inativo', label: 'Inativo' },
+            { value: 'pendente', label: 'Pendente' },
+          ]}
+        />
       </div>
 
       {/* Tabela */}
@@ -297,7 +299,8 @@ export default function AdministracaoPage() {
           data={filtrados}
           columns={columns}
           keyExtractor={(u) => u.id}
-          empty={<span>Nenhum usuário encontrado.</span>}
+          emptyTitle="Nenhum usuário encontrado"
+          emptyDesc="Ajuste os filtros ou cadastre um novo usuário."
         />
       </Card>
 
@@ -305,58 +308,64 @@ export default function AdministracaoPage() {
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        title={editando ? 'Editar usuário' : 'Novo usuário'}
         size="md"
       >
-        <div className="space-y-4 mt-2">
-          <Input
-            label="Nome completo"
-            placeholder="Ex: João da Silva"
-            value={form.nome}
-            onChange={(e) => setForm((f) => ({ ...f, nome: e.target.value }))}
-            required
-          />
-          <Input
-            label="E-mail"
-            type="email"
-            placeholder="usuario@escola.edu.br"
-            value={form.email}
-            onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-            required
-          />
-          <Select
-            label="Perfil de acesso"
-            value={form.perfil}
-            onChange={(e) => setForm((f) => ({ ...f, perfil: e.target.value as Perfil }))}
-          >
-            <option value="admin">Administrador — acesso total</option>
-            <option value="coordenador">Coordenador — gestão pedagógica</option>
-            <option value="professor">Professor — turmas e notas</option>
-            <option value="secretaria">Secretaria — matrículas e docs</option>
-          </Select>
-          <Select
-            label="Status"
-            value={form.status}
-            onChange={(e) => setForm((f) => ({ ...f, status: e.target.value as StatusUser }))}
-          >
-            <option value="ativo">Ativo</option>
-            <option value="inativo">Inativo</option>
-            <option value="pendente">Pendente (aguardando convite)</option>
-          </Select>
+        <Modal.Header>
+          <Modal.Title>{editando ? 'Editar usuário' : 'Novo usuário'}</Modal.Title>
+          <Modal.Close onClose={() => setModalOpen(false)} />
+        </Modal.Header>
+        <Modal.Body>
+          <div className="space-y-4">
+            <Input
+              label="Nome completo"
+              placeholder="Ex: João da Silva"
+              value={form.nome}
+              onChange={(e) => setForm((f) => ({ ...f, nome: e.target.value }))}
+              required
+            />
+            <Input
+              label="E-mail"
+              type="email"
+              placeholder="usuario@escola.edu.br"
+              value={form.email}
+              onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+              required
+            />
+            <Select
+              label="Perfil de acesso"
+              value={form.perfil}
+              onChange={(e) => setForm((f) => ({ ...f, perfil: e.target.value as Perfil }))}
+              options={[
+                { value: 'admin', label: 'Administrador — acesso total' },
+                { value: 'coordenador', label: 'Coordenador — gestão pedagógica' },
+                { value: 'professor', label: 'Professor — turmas e notas' },
+                { value: 'secretaria', label: 'Secretaria — matrículas e docs' },
+              ]}
+            />
+            <Select
+              label="Status"
+              value={form.status}
+              onChange={(e) => setForm((f) => ({ ...f, status: e.target.value as StatusUser }))}
+              options={[
+                { value: 'ativo', label: 'Ativo' },
+                { value: 'inativo', label: 'Inativo' },
+                { value: 'pendente', label: 'Pendente (aguardando convite)' },
+              ]}
+            />
 
-          {!editando && (
-            <p className="text-caption text-ink-muted bg-surface-subtle rounded-md px-3 py-2">
-              Um e-mail de convite será enviado automaticamente para o novo usuário.
-            </p>
-          )}
-
-          <div className="flex justify-end gap-2 pt-2 border-t border-surface-border">
-            <Button variant="outline" onClick={() => setModalOpen(false)}>Cancelar</Button>
-            <Button onClick={salvar} isLoading={loading}>
-              {editando ? 'Salvar alterações' : 'Criar usuário'}
-            </Button>
+            {!editando && (
+              <p className="text-caption text-ink-muted bg-surface-subtle rounded-md px-3 py-2">
+                Um e-mail de convite será enviado automaticamente para o novo usuário.
+              </p>
+            )}
           </div>
-        </div>
+        </Modal.Body>
+        <Modal.Footer className="justify-end gap-2">
+          <Button variant="outline" onClick={() => setModalOpen(false)}>Cancelar</Button>
+          <Button onClick={salvar} isLoading={loading}>
+            {editando ? 'Salvar alterações' : 'Criar usuário'}
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   )

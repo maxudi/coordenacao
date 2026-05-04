@@ -42,7 +42,7 @@ export default function ProfessorPage() {
     setLoading(true)
 
     Promise.all([
-      supabase.from('professores').select('*').eq('id', id).single(),
+      (supabase as any).from('professores').select('*').eq('id', id).single(),
       supabase
         .from('professor_turma_disciplina')
         .select('id, disciplina_id, turma_id, disciplinas(nome), turmas(nome, serie)')

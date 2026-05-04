@@ -132,7 +132,7 @@ export default function NovoAlunoPage() {
 
     try {
       const matricula = `MAT${Date.now().toString().slice(-8)}`
-      const { error } = await supabase.from('alunos').insert({
+      const { error } = await (supabase as any).from('alunos').insert({
         matricula,
         nome:            form.nomeCompleto.trim(),
         data_nascimento: form.dataNascimento || null,

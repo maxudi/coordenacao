@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 
-type Params = { id: string }
+type RouteContext = { params: Promise<{ id: string }> }
 
 /**
  * PUT /api/etapas/[id]
  */
-export async function PUT(request: NextRequest, { params }: { params: Params }) {
+export async function PUT(request: NextRequest, { params }: RouteContext) {
   try {
+    const { id } = await params
     const body = await request.json()
     const { nome, ordem, peso } = body
 
@@ -15,10 +16,10 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
       return NextResponse.json({ erro: 'Nome é obrigatório' }, { status: 400 })
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('etapas')
       .update({ nome: nome.trim(), ordem, peso })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single()
 
@@ -33,13 +34,15 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
 /**
  * DELETE /api/etapas/[id]
  */
-export async function DELETE(request: NextRequest, { params }: { params: Params }) {
+export async function DELETE(request: NextRequest, { params }: RouteContext) {
   try {
+    const { id } = await params
+
     // Verificar se há avaliações vinculadas
-    const { count } = await supabase
+    const { count } = await (supabase as any)
       .from('avaliacoes')
       .select('id', { count: 'exact', head: true })
-      .eq('etapa_id', params.id)
+      .eq('etapa_id', id)
 
     if (count && count > 0) {
       return NextResponse.json(
@@ -48,7 +51,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Params 
       )
     }
 
-    const { error } = await supabase.from('etapas').delete().eq('id', params.id)
+    const { error } = await (supabase as any).from('etapas').delete().eq('id', id)
     if (error) throw error
 
     return NextResponse.json({ mensagem: 'Etapa excluída' })

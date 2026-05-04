@@ -41,7 +41,7 @@ export default function ComunicacaoPage() {
   const fetchMensagens = async () => {
     setIsLoading(true)
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('mensagens')
       .select(`
         id,
@@ -94,7 +94,7 @@ export default function ComunicacaoPage() {
 
     setIsDeleting(true)
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('mensagens')
       .delete()
       .eq('id', deleteTarget.id)
@@ -279,8 +279,11 @@ export default function ComunicacaoPage() {
       <Modal
         open={!!selectedMensagem}
         onClose={() => setSelectedMensagem(null)}
-        title="Detalhes da mensagem"
       >
+        <Modal.Header>
+          <Modal.Title>Detalhes da mensagem</Modal.Title>
+          <Modal.Close onClose={() => setSelectedMensagem(null)} />
+        </Modal.Header>
         {selectedMensagem && (
           <div className="space-y-4">
             <div>

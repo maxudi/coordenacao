@@ -38,7 +38,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   // Carregar todas as turmas para resolver pelo nome
-  const { data: turmas } = await supabase.from('turmas').select('id, nome, serie')
+  const { data: turmas } = await (supabase as any).from('turmas').select('id, nome, serie')
   const turmaMap: Record<string, string> = {}
   for (const t of turmas ?? []) {
     turmaMap[t.nome.toLowerCase().trim()] = t.id
@@ -105,7 +105,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // Inserir em lotes de 100
     for (let i = 0; i < inserts.length; i += 100) {
       const batch = inserts.slice(i, i + 100)
-      const { error } = await supabase.from('alunos').insert(batch)
+      const { error } = await (supabase as any).from('alunos').insert(batch)
       if (error) {
         return NextResponse.json(
           { error: `Erro ao inserir lote (linha ~${i + 2}): ${error.message}` },

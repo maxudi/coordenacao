@@ -81,7 +81,7 @@ export default function EditarProfessorPage() {
     if (!validar()) return
     setSalvando(true)
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('professores')
       .update({
         nome: form.nome.trim(),

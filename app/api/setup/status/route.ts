@@ -18,7 +18,7 @@ export async function GET() {
 
   await Promise.all(
     TABELAS.map(async (tabela) => {
-      const { count, error } = await supabase
+      const { count, error } = await (supabase as any)
         .from(tabela)
         .select('*', { count: 'exact', head: true })
 

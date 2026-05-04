@@ -63,35 +63,41 @@ export default function EditarAlunoPage() {
   useEffect(() => {
     if (!id) return
 
-    Promise.all([
-      supabase
-        .from('alunos')
-        .select('nome, data_nascimento, turma_id, responsavel, telefone, email, status')
-        .eq('id', id)
-        .single(),
-      supabase
-        .from('turmas')
-        .select('id, nome, serie, turno')
-        .order('nome'),
-    ]).then(([alunoRes, turmasRes]) => {
-      if (alunoRes.error || !alunoRes.data) {
+    const fetchData = async () => {
+      const [alunoRes, turmasRes] = await Promise.all([
+        supabase
+          .from('alunos')
+          .select('nome, data_nascimento, turma_id, responsavel, telefone, email, status')
+          .eq('id', id)
+          .single(),
+        supabase
+          .from('turmas')
+          .select('id, nome, serie, turno')
+          .order('nome'),
+      ])
+
+      const aluno = alunoRes as any
+      if (aluno.error || !aluno.data) {
         setLoadErro('Aluno não encontrado')
         setLoading(false)
         return
       }
-      const a = alunoRes.data as any
+
+      const a = aluno.data as any
       setForm({
-        nome:           a.nome           ?? '',
+        nome:           a.nome            ?? '',
         dataNascimento: a.data_nascimento ?? '',
-        turmaId:        a.turma_id       ?? '',
-        responsavel:    a.responsavel    ?? '',
-        telefone:       a.telefone       ?? '',
-        email:          a.email          ?? '',
-        status:         a.status         ?? 'ativo',
+        turmaId:        a.turma_id        ?? '',
+        responsavel:    a.responsavel     ?? '',
+        telefone:       a.telefone        ?? '',
+        email:          a.email           ?? '',
+        status:         a.status          ?? 'ativo',
       })
       setTurmas((turmasRes.data ?? []) as Turma[])
       setLoading(false)
-    })
+    }
+
+    fetchData()
   }, [id])
 
   const handleChange = (
@@ -108,7 +114,7 @@ export default function EditarAlunoPage() {
     if (Object.keys(erros).length) { setErrors(erros); return }
 
     setIsSubmitting(true)
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('alunos')
       .update({
         nome:            form.nome.trim(),
@@ -132,7 +138,7 @@ export default function EditarAlunoPage() {
   )
   if (loadErro) return (
     <div className="p-8 space-y-4">
-      <Alert variant="error" title="Erro" description={loadErro} />
+      <Alert variant="danger" title="Erro" description={loadErro} />
       <Link href="/alunos"><Button variant="outline">← Voltar</Button></Link>
     </div>
   )

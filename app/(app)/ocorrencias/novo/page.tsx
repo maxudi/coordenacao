@@ -22,7 +22,7 @@ export default function NovaOcorrenciaPage() {
 
   useEffect(() => {
     const fetchAlunos = async () => {
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from('alunos')
         .select('id, nome')
         .eq('status', 'ativo')
@@ -48,7 +48,7 @@ export default function NovaOcorrenciaPage() {
 
     setIsLoading(true)
 
-    const { error } = await supabase.from('ocorrencias').insert([
+    const { error } = await (supabase as any).from('ocorrencias').insert([
       {
         aluno_id: formData.aluno_id,
         tipo: formData.tipo,

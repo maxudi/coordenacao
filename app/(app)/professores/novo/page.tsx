@@ -56,7 +56,7 @@ export default function NovoProfessorPage() {
 
     setSalvando(true)
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('professores')
       .insert({
         nome: form.nome.trim(),

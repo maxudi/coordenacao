@@ -37,7 +37,7 @@ export default function FrequenciasPage() {
   const fetchFrequencias = async () => {
     setIsLoading(true)
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('frequencia_resumo')
       .select(`
         id,

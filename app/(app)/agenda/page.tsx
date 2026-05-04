@@ -245,38 +245,45 @@ export default function AgendaPage() {
       <Modal
         open={!!eventoAtivo}
         onClose={() => setEventoAtivo(null)}
-        title={eventoAtivo?.titulo ?? ''}
       >
         {eventoAtivo && (
-          <div className="space-y-4 mt-2">
-            <div className="flex items-center gap-2">
-              <span className={cn('text-caption font-medium rounded-full px-2.5 py-1', tipoColor[eventoAtivo.tipo])}>
-                {tipoLabel[eventoAtivo.tipo]}
-              </span>
-              <span className="text-body-sm text-ink-muted">
-                {fmtData(eventoAtivo.data)}{eventoAtivo.hora ? ` às ${eventoAtivo.hora}` : ''}
-              </span>
-            </div>
-            <p className="text-body text-ink">{eventoAtivo.descricao}</p>
-            {eventoAtivo.local && (
-              <p className="flex items-center gap-2 text-body-sm text-ink-muted">
-                <IconLocation />
-                {eventoAtivo.local}
-              </p>
-            )}
-            {eventoAtivo.turmas.length > 0 && (
-              <div>
-                <p className="text-caption text-ink-faint mb-1.5">Turmas envolvidas</p>
-                <div className="flex flex-wrap gap-1">
-                  {eventoAtivo.turmas.map((t) => <Badge key={t} variant="secondary">{t}</Badge>)}
+          <>
+            <Modal.Header>
+              <Modal.Title>{eventoAtivo.titulo}</Modal.Title>
+              <Modal.Close onClose={() => setEventoAtivo(null)} />
+            </Modal.Header>
+            <Modal.Body>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className={cn('text-caption font-medium rounded-full px-2.5 py-1', tipoColor[eventoAtivo.tipo])}>
+                    {tipoLabel[eventoAtivo.tipo]}
+                  </span>
+                  <span className="text-body-sm text-ink-muted">
+                    {fmtData(eventoAtivo.data)}{eventoAtivo.hora ? ` às ${eventoAtivo.hora}` : ''}
+                  </span>
                 </div>
+                <p className="text-body text-ink">{eventoAtivo.descricao}</p>
+                {eventoAtivo.local && (
+                  <p className="flex items-center gap-2 text-body-sm text-ink-muted">
+                    <IconLocation />
+                    {eventoAtivo.local}
+                  </p>
+                )}
+                {eventoAtivo.turmas.length > 0 && (
+                  <div>
+                    <p className="text-caption text-ink-faint mb-1.5">Turmas envolvidas</p>
+                    <div className="flex flex-wrap gap-1">
+                      {eventoAtivo.turmas.map((t) => <Badge key={t} variant="secondary">{t}</Badge>)}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-            <div className="flex justify-end gap-2 pt-2">
+            </Modal.Body>
+            <Modal.Footer className="justify-end gap-2">
               <Button variant="outline" onClick={() => setEventoAtivo(null)}>Fechar</Button>
               <Button>Editar evento</Button>
-            </div>
-          </div>
+            </Modal.Footer>
+          </>
         )}
       </Modal>
     </div>

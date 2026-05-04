@@ -98,7 +98,7 @@ export default function NovoTurmaPage() {
 
     setSalvando(true)
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('turmas')
       .insert({
         nome: form.nome.trim(),

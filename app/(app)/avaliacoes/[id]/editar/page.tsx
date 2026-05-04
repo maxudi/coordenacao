@@ -30,7 +30,7 @@ export default function EditarAvaliacaoPage() {
       const id = params.id as string
 
       // Buscar avaliação
-      const { data: aval } = await supabase
+      const { data: aval } = await (supabase as any)
         .from('avaliacoes')
         .select('*')
         .eq('id', id)
@@ -47,13 +47,13 @@ export default function EditarAvaliacaoPage() {
       }
 
       // Buscar referências
-      const { data: alunosData } = await supabase
+      const { data: alunosData } = await (supabase as any)
         .from('alunos')
         .select('id, nome')
         .eq('status', 'ativo')
         .order('nome')
 
-      const { data: disciplinasData } = await supabase
+      const { data: disciplinasData } = await (supabase as any)
         .from('disciplinas')
         .select('id, nome')
         .order('nome')
@@ -86,7 +86,7 @@ export default function EditarAvaliacaoPage() {
 
     setIsSaving(true)
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('avaliacoes')
       .update({
         aluno_id: formData.aluno_id,

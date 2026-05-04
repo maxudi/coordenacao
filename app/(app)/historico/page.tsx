@@ -38,7 +38,7 @@ export default function HistoricoPage() {
   // ── FETCH ALUNOS ─────────────────────────────────────────────────────────
   useEffect(() => {
     const fetchAlunos = async () => {
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from('alunos')
         .select('id, nome, turma_id, turmas(nome)')
         .eq('status', 'ativo')
@@ -67,14 +67,14 @@ export default function HistoricoPage() {
       setIsLoading(true)
 
       // Buscar aluno
-      const { data: alunoData } = await supabase
+      const { data: alunoData } = await (supabase as any)
         .from('alunos')
         .select('id, nome, turma_id, turmas(nome)')
         .eq('id', aluno_id)
         .single()
 
       // Buscar avaliações
-      const { data: avaliacoes } = await supabase
+      const { data: avaliacoes } = await (supabase as any)
         .from('avaliacoes')
         .select('valor, data, tipo, disciplinas(nome)')
         .eq('aluno_id', aluno_id)
@@ -82,7 +82,7 @@ export default function HistoricoPage() {
         .limit(50)
 
       // Buscar ocorrências
-      const { data: ocorrencias } = await supabase
+      const { data: ocorrencias } = await (supabase as any)
         .from('ocorrencias')
         .select('tipo, descricao, status, created_at')
         .eq('aluno_id', aluno_id)
@@ -90,7 +90,7 @@ export default function HistoricoPage() {
         .limit(50)
 
       // Buscar frequência
-      const { data: frequencia } = await supabase
+      const { data: frequencia } = await (supabase as any)
         .from('frequencia_resumo')
         .select('mes, ano, percentual')
         .eq('aluno_id', aluno_id)

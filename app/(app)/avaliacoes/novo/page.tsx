@@ -39,11 +39,11 @@ export default function NovaAvaliacaoPage() {
         { data: professoresData },
         { data: turmasData },
       ] = await Promise.all([
-        supabase.from('alunos').select('id, nome, turma_id').eq('status', 'ativo').order('nome'),
-        supabase.from('disciplinas').select('id, nome').order('nome'),
-        supabase.from('etapas').select('id, nome, ordem').order('ordem'),
-        supabase.from('professores').select('id, nome').order('nome'),
-        supabase.from('turmas').select('id, nome').order('nome'),
+        (supabase as any).from('alunos').select('id, nome, turma_id').eq('status', 'ativo').order('nome'),
+        (supabase as any).from('disciplinas').select('id, nome').order('nome'),
+        (supabase as any).from('etapas').select('id, nome, ordem').order('ordem'),
+        (supabase as any).from('professores').select('id, nome').order('nome'),
+        (supabase as any).from('turmas').select('id, nome').order('nome'),
       ])
 
       setAlunos(alunosData ?? [])
@@ -90,7 +90,7 @@ export default function NovaAvaliacaoPage() {
 
     setIsLoading(true)
 
-    const { error } = await supabase.from('avaliacoes').insert([
+    const { error } = await (supabase as any).from('avaliacoes').insert([
       {
         aluno_id:      formData.aluno_id,
         disciplina_id: formData.disciplina_id,

@@ -33,7 +33,7 @@ export default function NovaMessagemPage() {
   // ── FETCH ALUNOS ─────────────────────────────────────────────────────────
   useEffect(() => {
     const fetchAlunos = async () => {
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from('alunos')
         .select('id, nome, responsavel, telefone')
         .eq('status', 'ativo')
@@ -102,7 +102,7 @@ export default function NovaMessagemPage() {
 
     setIsLoading(true)
 
-    const { error } = await supabase.from('mensagens').insert([
+    const { error } = await (supabase as any).from('mensagens').insert([
       {
         aluno_id: formData.aluno_id,
         telefone: formData.telefone,

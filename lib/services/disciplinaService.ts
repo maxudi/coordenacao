@@ -11,7 +11,7 @@ export const disciplinaService = {
    * Buscar todas as disciplinas
    */
   async getAll(options?: { orderBy?: 'nome' | 'created_at'; ascending?: boolean }) {
-    const query = supabase.from('disciplinas').select('*')
+    const query = (supabase as any).from('disciplinas').select('*')
 
     if (options?.orderBy === 'nome') {
       query.order('nome', { ascending: options.ascending !== false })
@@ -26,7 +26,7 @@ export const disciplinaService = {
    * Buscar disciplina por ID
    */
   async getById(id: string) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('disciplinas')
       .select('*')
       .eq('id', id)
@@ -40,7 +40,7 @@ export const disciplinaService = {
    * Buscar disciplina por nome (unique check)
    */
   async getByNome(nome: string) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('disciplinas')
       .select('*')
       .eq('nome', nome.trim())
@@ -72,7 +72,7 @@ export const disciplinaService = {
       throw new Error(`Disciplina "${nomeTrimmed}" já existe`)
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('disciplinas')
       .insert({ nome: nomeTrimmed })
       .select()
@@ -98,7 +98,7 @@ export const disciplinaService = {
     }
 
     // Verificar se novo nome já existe (em outro registro)
-    const existente = await supabase
+    const existente = await (supabase as any)
       .from('disciplinas')
       .select('id')
       .eq('nome', nomeTrimmed)
@@ -109,7 +109,7 @@ export const disciplinaService = {
       throw new Error(`Disciplina "${nomeTrimmed}" já existe`)
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('disciplinas')
       .update({ nome: nomeTrimmed })
       .eq('id', id)
@@ -126,7 +126,7 @@ export const disciplinaService = {
    */
   async delete(id: string) {
     // Verificar se há vínculos
-    const { count } = await supabase
+    const { count } = await (supabase as any)
       .from('professor_turma_disciplina')
       .select('id', { count: 'exact', head: true })
       .eq('disciplina_id', id)
@@ -137,7 +137,7 @@ export const disciplinaService = {
       )
     }
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('disciplinas')
       .delete()
       .eq('id', id)
@@ -149,7 +149,7 @@ export const disciplinaService = {
    * Buscar disciplinas de um professor em uma turma específica
    */
   async getDisciplinasByProfessorTurma(professorId: string, turmaId: string) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('professor_turma_disciplina')
       .select('disciplinas(*)')
       .eq('professor_id', professorId)
@@ -164,7 +164,7 @@ export const disciplinaService = {
    * Buscar todas as disciplinas de uma turma (com professores)
    */
   async getDisciplinasTurmaComProfessores(turmaId: string) {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('professor_turma_disciplina')
       .select('disciplinas(*), professores(id, nome)')
       .eq('turma_id', turmaId)

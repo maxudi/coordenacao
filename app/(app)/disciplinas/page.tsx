@@ -28,7 +28,7 @@ export default function DisciplinasPage() {
   // ── FETCH ────────────────────────────────────────────────────────────────
   const fetchDisciplinas = async () => {
     setIsLoading(true)
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('disciplinas')
       .select('id, nome')
       .order('nome')
@@ -55,7 +55,7 @@ export default function DisciplinasPage() {
     }
 
     setIsSaving(true)
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('disciplinas')
       .insert({ nome })
 
@@ -87,7 +87,7 @@ export default function DisciplinasPage() {
     }
 
     setIsSaving(true)
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('disciplinas')
       .update({ nome })
       .eq('id', editando.id)
@@ -113,7 +113,7 @@ export default function DisciplinasPage() {
   // ── DELETAR ──────────────────────────────────────────────────────────────
   const handleDeletar = async (disc: Disciplina) => {
     // Verificar se há vínculos
-    const { count } = await supabase
+    const { count } = await (supabase as any)
       .from('professor_turma_disciplina')
       .select('id', { count: 'exact', head: true })
       .eq('disciplina_id', disc.id)
@@ -124,7 +124,7 @@ export default function DisciplinasPage() {
     }
 
     // Verificar avaliações
-    const { count: countAval } = await supabase
+    const { count: countAval } = await (supabase as any)
       .from('avaliacoes')
       .select('id', { count: 'exact', head: true })
       .eq('disciplina_id', disc.id)
@@ -135,7 +135,7 @@ export default function DisciplinasPage() {
     }
 
     setDeletando(disc.id)
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('disciplinas')
       .delete()
       .eq('id', disc.id)

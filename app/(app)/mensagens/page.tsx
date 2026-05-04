@@ -103,7 +103,7 @@ export default function MensagensPage() {
             placeholder="Buscar conversa..."
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
-            size="sm"
+            inputSize="sm"
           />
         </div>
 

@@ -34,7 +34,7 @@ export default function NovaPresencaPage() {
   // ── FETCH TURMAS ─────────────────────────────────────────────────────────
   useEffect(() => {
     const fetchTurmas = async () => {
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from('turmas')
         .select('id, nome')
         .order('nome')
@@ -53,14 +53,14 @@ export default function NovaPresencaPage() {
     }
 
     const fetchAlunos = async () => {
-      const { data } = await supabase
+      const { data } = await (supabase as any)
         .from('alunos')
         .select('id, nome')
         .eq('turma_id', turma_id)
         .eq('status', 'ativo')
         .order('nome')
 
-      const comPresenca: AlunoComPresenca[] = (data ?? []).map(a => ({
+      const comPresenca: AlunoComPresenca[] = (data ?? []).map((a: any) => ({
         aluno_id: a.id,
         nome: a.nome,
         turma_nome: '',
@@ -102,7 +102,7 @@ export default function NovaPresencaPage() {
       presente: a.presente,
     }))
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('frequencia_diaria')
       .upsert(registros, { onConflict: 'aluno_id,data' })
 

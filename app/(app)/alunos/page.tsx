@@ -42,7 +42,7 @@ export default function AlunosPage() {
   const fetchAlunos = async () => {
     setIsLoading(true)
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('alunos')
       .select(`
         id,
@@ -99,7 +99,7 @@ export default function AlunosPage() {
 
     setIsDeleting(true)
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('alunos')
       .delete()
       .eq('id', deleteTarget.id)

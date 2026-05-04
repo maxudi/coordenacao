@@ -48,8 +48,8 @@ export default function TurmaPage() {
     setLoading(true)
 
     Promise.all([
-      supabase.from('turmas').select('*').eq('id', id).single(),
-      supabase.from('alunos').select('id, nome, status, matricula').eq('turma_id', id).order('nome'),
+      (supabase as any).from('turmas').select('*').eq('id', id).single(),
+      (supabase as any).from('alunos').select('id, nome, status, matricula').eq('turma_id', id).order('nome'),
     ]).then(([t, a]) => {
       if (t.error || !t.data) { setErro(t.error?.message ?? 'Turma não encontrada'); setLoading(false); return }
       setTurma(t.data as Turma)

@@ -37,7 +37,7 @@ export default function ProfessoresPage() {
   const fetchProfessores = async () => {
     setIsLoading(true)
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('professores')
       .select('id, nome, email, telefone, status')
       .order('nome')
@@ -50,7 +50,7 @@ export default function ProfessoresPage() {
     }
 
     // Contar disciplinas por professor
-    const { data: ptd } = await supabase
+    const { data: ptd } = await (supabase as any)
       .from('professor_turma_disciplina')
       .select('professor_id')
 
@@ -59,7 +59,7 @@ export default function ProfessoresPage() {
       discPorProf[item.professor_id] = (discPorProf[item.professor_id] ?? 0) + 1
     }
 
-    const formatted: Professor[] = (data ?? []).map(p => ({
+    const formatted: Professor[] = (data ?? []).map((p: any) => ({
       id: p.id,
       nome: p.nome,
       email: p.email ?? '—',
@@ -93,7 +93,7 @@ export default function ProfessoresPage() {
 
     setIsDeleting(true)
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('professores')
       .delete()
       .eq('id', deleteTarget.id)

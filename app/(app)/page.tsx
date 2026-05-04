@@ -359,7 +359,7 @@ export default function DashboardPage() {
                         <p className="text-body-sm font-medium text-ink leading-tight">{proj.nome}</p>
                         <p className="text-caption text-ink-muted mt-0.5">{proj.turmas}</p>
                       </div>
-                      <Badge variant={proj.tag === 'Em andamento' ? 'secondary' : 'default'} className="shrink-0 whitespace-nowrap">
+                      <Badge variant={proj.tag === 'Em andamento' ? 'secondary' : 'neutral'} className="shrink-0 whitespace-nowrap">
                         {proj.tag}
                       </Badge>
                     </div>

@@ -182,8 +182,8 @@ export default function AvalicoesPage() {
 
   const fetchRefs = async () => {
     const [{ data: discs }, { data: ets }] = await Promise.all([
-      supabase.from('disciplinas').select('id, nome').order('nome'),
-      supabase.from('etapas').select('id, nome, ordem').order('ordem'),
+      (supabase as any).from('disciplinas').select('id, nome').order('nome'),
+      (supabase as any).from('etapas').select('id, nome, ordem').order('ordem'),
     ])
     setDisciplinas(discs ?? [])
     setEtapas(ets ?? [])
@@ -206,7 +206,7 @@ export default function AvalicoesPage() {
   const handleDelete = async () => {
     if (!deleteTarget) return
     setIsDeleting(true)
-    const { error } = await supabase.from('avaliacoes').delete().eq('id', deleteTarget.id)
+    const { error } = await (supabase as any).from('avaliacoes').delete().eq('id', deleteTarget.id)
     if (error) { danger('Erro ao excluir avaliação') }
     else { success('Avaliação removida'); fetchAvaliacoes() }
     setIsDeleting(false)

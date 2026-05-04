@@ -195,7 +195,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { data: inserted, error } = await supabase
+    const { data: inserted, error } = await (supabase as any)
       .from('avaliacoes')
       .insert({
         aluno_id,

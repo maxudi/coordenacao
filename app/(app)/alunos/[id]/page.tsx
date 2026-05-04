@@ -100,10 +100,10 @@ export default function AlunoPage() {
     setLoading(true)
 
     Promise.all([
-      (supabase.from('alunos') as any).select('*, turmas(nome, serie)').eq('id', id).single(),
-      supabase.from('avaliacoes').select('*, disciplinas(nome)').eq('aluno_id', id).order('data', { ascending: false }),
-      supabase.from('frequencia_resumo').select('*').eq('aluno_id', id).order('ano').order('mes'),
-      supabase.from('ocorrencias').select('*').eq('aluno_id', id).order('created_at', { ascending: false }),
+      ((supabase as any).from('alunos') as any).select('*, turmas(nome, serie)').eq('id', id).single(),
+      (supabase as any).from('avaliacoes').select('*, disciplinas(nome)').eq('aluno_id', id).order('data', { ascending: false }),
+      (supabase as any).from('frequencia_resumo').select('*').eq('aluno_id', id).order('ano').order('mes'),
+      (supabase as any).from('ocorrencias').select('*').eq('aluno_id', id).order('created_at', { ascending: false }),
     ]).then(([a, av, fr, oc]) => {
       if (a.error || !a.data) { setErro(a.error?.message ?? 'Aluno não encontrado'); setLoading(false); return }
       setAluno(a.data as unknown as Aluno)
@@ -117,7 +117,7 @@ export default function AlunoPage() {
   async function salvarOcorrencia() {
     if (!descForm.trim() || !aluno) return
     setSalvando(true)
-    const { error } = await (supabase.from('ocorrencias') as any).insert({
+    const { error } = await ((supabase as any).from('ocorrencias') as any).insert({
       aluno_id: aluno.id,
       tipo: tipoForm,
       descricao: descForm.trim(),
@@ -126,13 +126,13 @@ export default function AlunoPage() {
     if (error) { toast({ title: 'Erro ao salvar', variant: 'danger', duration: 4000 }); setSalvando(false); return }
     toast({ title: 'Ocorrência registrada', variant: 'success', duration: 3000 })
     setDescForm('')
-    const { data } = await (supabase.from('ocorrencias') as any).select('*').eq('aluno_id', aluno.id).order('created_at', { ascending: false })
+    const { data } = await ((supabase as any).from('ocorrencias') as any).select('*').eq('aluno_id', aluno.id).order('created_at', { ascending: false })
     setOcorrencias((data ?? []) as Ocorrencia[])
     setSalvando(false)
   }
 
   async function resolverOcorrencia(ocId: string) {
-    await (supabase.from('ocorrencias') as any)
+    await ((supabase as any).from('ocorrencias') as any)
       .update({ status: 'resolvida' }).eq('id', ocId)
     setOcorrencias(prev => prev.map(o => o.id === ocId ? { ...o, status: 'resolvida' } : o))
   }

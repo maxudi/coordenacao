@@ -24,11 +24,11 @@ export async function POST(request: Request) {
     }
 
     // Buscar alunos para validação
-    const { data: alunos } = await supabase
+    const { data: alunos } = await (supabase as any)
       .from('alunos')
       .select('id, nome')
 
-    const alunoMap = new Map((alunos ?? []).map(a => [a.nome.toLowerCase(), a.id]))
+    const alunoMap = new Map((alunos ?? []).map((a: any) => [a.nome.toLowerCase(), a.id]))
 
     const erros: Array<{ linha: number; nome: string; motivo: string }> = []
     const frequenciasValidas: any[] = []
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
     for (let i = 0; i < frequenciasValidas.length; i += batchSize) {
       const batch = frequenciasValidas.slice(i, i + batchSize)
 
-      const { error, count } = await supabase
+      const { error, count } = await (supabase as any)
         .from('frequencia_diaria')
         .upsert(batch, { onConflict: 'aluno_id,data' })
 

@@ -122,7 +122,7 @@ export default function EditarTurmaPage() {
     if (!validar()) return
     setSalvando(true)
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('turmas')
       .update({
         nome: form.nome.trim(),

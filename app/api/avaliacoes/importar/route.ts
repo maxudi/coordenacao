@@ -24,13 +24,13 @@ export async function POST(request: Request) {
     }
 
     // Buscar referências para validação
-    const { data: alunos } = await supabase.from('alunos').select('id, nome')
-    const { data: disciplinas } = await supabase.from('disciplinas').select('id, nome')
-    const { data: etapas } = await supabase.from('etapas').select('id, nome')
+    const { data: alunos } = await (supabase as any).from('alunos').select('id, nome')
+    const { data: disciplinas } = await (supabase as any).from('disciplinas').select('id, nome')
+    const { data: etapas } = await (supabase as any).from('etapas').select('id, nome')
 
-    const alunoMap      = new Map((alunos     ?? []).map(a => [a.nome.toLowerCase(), a.id]))
-    const disciplinaMap = new Map((disciplinas ?? []).map(d => [d.nome.toLowerCase(), d.id]))
-    const etapaMap      = new Map((etapas      ?? []).map(e => [e.nome.toLowerCase(), e.id]))
+    const alunoMap      = new Map((alunos     ?? []).map((a: any) => [a.nome.toLowerCase(), a.id]))
+    const disciplinaMap = new Map((disciplinas ?? []).map((d: any) => [d.nome.toLowerCase(), d.id]))
+    const etapaMap      = new Map((etapas      ?? []).map((e: any) => [e.nome.toLowerCase(), e.id]))
 
     const erros: Array<{ linha: number; nome: string; motivo: string }> = []
     const avaliacoesValidas: any[] = []
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
     for (let i = 0; i < avaliacoesValidas.length; i += batchSize) {
       const batch = avaliacoesValidas.slice(i, i + batchSize)
 
-      const { error, count } = await supabase
+      const { error, count } = await (supabase as any)
         .from('avaliacoes')
         .insert(batch)
 

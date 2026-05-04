@@ -25,6 +25,10 @@ export type { Column }                     from './Table'
 export { default as Upload }               from './Upload'
 export type { UploadProps, UploadFile }    from './Upload'
 
+// Form controls
+export { default as Checkbox }             from './Checkbox'
+export type { CheckboxProps }              from './Checkbox'
+
 // Utility
 export {
   Skeleton,

@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { disciplinaService } from '@/lib/services/disciplinaService'
 
-type Params = { id: string }
+type RouteContext = { params: Promise<{ id: string }> }
 
 /**
  * GET /api/disciplinas/[id]
  * Buscar disciplina específica
  */
-export async function GET(request: NextRequest, { params }: { params: Params }) {
+export async function GET(request: NextRequest, { params }: RouteContext) {
   try {
-    const { id } = params
+    const { id } = await params
     const disciplina = await disciplinaService.getById(id)
     return NextResponse.json(disciplina)
   } catch (error) {
@@ -24,9 +24,9 @@ export async function GET(request: NextRequest, { params }: { params: Params }) 
  * Atualizar disciplina
  * Body: { nome: string }
  */
-export async function PUT(request: NextRequest, { params }: { params: Params }) {
+export async function PUT(request: NextRequest, { params }: RouteContext) {
   try {
-    const { id } = params
+    const { id } = await params
     const body = await request.json()
     const { nome } = body
 
@@ -48,9 +48,9 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
  * DELETE /api/disciplinas/[id]
  * Deletar disciplina (falha se há vínculos)
  */
-export async function DELETE(request: NextRequest, { params }: { params: Params }) {
+export async function DELETE(request: NextRequest, { params }: RouteContext) {
   try {
-    const { id } = params
+    const { id } = await params
     await disciplinaService.delete(id)
     return NextResponse.json({ mensagem: 'Disciplina deletada com sucesso' })
   } catch (error) {
