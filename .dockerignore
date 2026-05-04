@@ -1,0 +1,30 @@
+# Dependências
+node_modules
+npm-debug.log*
+
+# Build output
+.next
+out
+
+# Env com segredos — NUNCA enviar para imagem
+.env
+.env.local
+.env.*.local
+
+# Dev tools
+.git
+.gitignore
+.github
+.vscode
+.qodo
+
+# Docs e arquivos de apoio
+*.md
+supabase/
+design-system/
+teste.ts
+TESTES_MODELO_PEDAGOGICO.ts
+
+# OS
+.DS_Store
+Thumbs.db
