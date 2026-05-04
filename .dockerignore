@@ -21,7 +21,6 @@ out
 # Docs e arquivos de apoio
 *.md
 supabase/
-design-system/
 teste.ts
 TESTES_MODELO_PEDAGOGICO.ts
 
